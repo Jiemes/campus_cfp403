@@ -1,0 +1,102 @@
+{
+  "id": 26,
+  "numero": 26,
+  "moduloId": 6,
+  "moduloNombre": "Módulo 6: Desarrollo de Videojuegos y Motores Gráficos 2D",
+  "titulo": "Motores Gráficos 2D: Canvas, Sprites, Vectores y Cajas de Colisión (Hitboxes)",
+  "descripcionCorta": "Aprende a programar un bucle de juego (Game Loop), dibujar entidades dinámicas en un lienzo Canvas 2D, calcular trayectorias vectoriales y detectar colisiones entre hitboxes rectangulares (AABB).",
+  "duracionEstimada": "3.5 Horas de cátedra",
+  "dificultad": "Avanzado",
+  "profesor": "Equipo Docente CFP N° 403 Mercedes",
+  "tipo_entorno": "canvas_2d",
+  "briefing": {
+    "introduccion": "El desarrollo de videojuegos y simulaciones visuales combina lógica algorítmica, geometría analítica y rendimiento en tiempo real. En lugar de procesar texto, la computadora debe actualizar una escena gráfica cuadro a cuadro (a 60 cuadros por segundo o FPS).\n\nEn esta clase programaremos entidades con coordenadas (x, y), aplicaremos velocidad y detectaremos colisiones entre cajas delimitadoras (Axis-Aligned Bounding Box, AABB).",
+    "secciones": [
+      {
+        "id": "sec-game-1",
+        "titulo": "1. El Ciclo de Vida: El Game Loop",
+        "contenido": "Todo motor de videojuegos opera bajo tres etapas continuas:\n1. **Capturar Entradas:** Leer teclado, mouse o joystick.\n2. **Actualizar Estado:** Modificar posiciones (`x += velocidad_x`), aplicar gravedad o calcular colisiones.\n3. **Renderizar Escena:** Limpiar la pantalla previa y dibujar las entidades en su nueva posición.",
+        "codigo": "# Estructura básica de una entidad gráfica\nclass Entidad2D:\n    def __init__(self, x, y, ancho, alto, color):\n        self.x = x\n        self.y = y\n        self.ancho = ancho\n        self.alto = alto\n        self.color = color\n        self.vel_x = 2\n\n    def actualizar(self):\n        self.x += self.vel_x\n        # Rebote en límites del canvas (560px ancho)\n        if self.x + self.ancho >= 560 or self.x <= 0:\n            self.vel_x *= -1\n\n    def dibujar(self):\n        campus.dibujar_rectangulo(self.x, self.y, self.ancho, self.alto, self.color)"
+      },
+      {
+        "id": "sec-game-2",
+        "titulo": "2. Detección de Colisiones AABB (Cajas Alineadas)",
+        "contenido": "Para verificar si dos rectángulos A y B se superponen, evaluamos sus cuatro bordes:\n`hay_colision = (A.x < B.x + B.ancho) and (A.x + A.ancho > B.x) and (A.y < B.y + B.alto) and (A.y + A.alto > B.y)`.",
+        "codigo": "def verificar_colision(box1, box2):\n    return (\n        box1['x'] < box2['x'] + box2['ancho'] and\n        box1['x'] + box1['ancho'] > box2['x'] and\n        box1['y'] < box2['y'] + box2['alto'] and\n        box1['y'] + box1['alto'] > box2['y']\n    )"
+      }
+    ],
+    "conclusiones": [
+      "El Game Loop sincroniza entradas, físicas y dibujado en pantalla.",
+      "Las cajas de colisión (Hitboxes) representan el volumen físico real de los personajes para simplificar los cálculos.",
+      "El espacio de coordenadas 2D en gráficos por computadora tiene su origen (0, 0) en la esquina superior izquierda."
+    ]
+  },
+  "sandbox": {
+    "archivoNombre": "motor_videojuego_2d.py",
+    "codigoInicial": "# ============================================================\n# CFP N° 403 Mercedes - Clase 26: Laboratorio de Motores 2D\n# Práctica: Renderizado de Entidades y Cajas de Colisión\n# ============================================================\n\n# 1. Limpiar pantalla con fondo oscuro institucional\ncampus.limpiar(\"#07090e\")\n\n# 2. Definición de dos entidades en el espacio 2D\njugador = {\"x\": 80, \"y\": 140, \"ancho\": 50, \"alto\": 50, \"color\": \"#00e5ff\"}\nobstaculo = {\"x\": 240, \"y\": 140, \"ancho\": 60, \"alto\": 50, \"color\": \"#ef4444\"}\n\n# 3. Función de detección de colisión AABB\ndef verificar_colision(a, b):\n    return (\n        a[\"x\"] < b[\"x\"] + b[\"ancho\"] and\n        a[\"x\"] + a[\"ancho\"] > b[\"x\"] and\n        a[\"y\"] < b[\"y\"] + b[\"alto\"] and\n        a[\"y\"] + a[\"alto\"] > b[\"y\"]\n    )\n\nhay_choque = verificar_colision(jugador, obstaculo)\n\n# 4. Renderizado en el Canvas\n# Dibujar jugador (Nave / Personaje)\ncampus.dibujar_rectangulo(jugador[\"x\"], jugador[\"y\"], jugador[\"ancho\"], jugador[\"alto\"], jugador[\"color\"])\ncampus.dibujar_caja_colision(jugador[\"x\"]-2, jugador[\"y\"]-2, jugador[\"ancho\"]+4, jugador[\"alto\"]+4, hay_choque)\n\n# Dibujar obstáculo\ncampus.dibujar_rectangulo(obstaculo[\"x\"], obstaculo[\"y\"], obstaculo[\"ancho\"], obstaculo[\"alto\"], obstaculo[\"color\"])\ncampus.dibujar_caja_colision(obstaculo[\"x\"]-2, obstaculo[\"y\"]-2, obstaculo[\"ancho\"]+4, obstaculo[\"alto\"]+4, hay_choque)\n\n# Elementos de interfaz (HUD)\ncampus.escribir_texto(20, 35, \"CFP 403 Mercedes • Laboratorio Gráfico 2D\", color=\"#00e5ff\", tamano=15)\nresultado_texto = \"[ALERTA] ¡COLISIÓN DETECTADA!\" if hay_choque else \"[ESTADO] Trayectoria despejada (Sin impacto)\"\ncampus.escribir_texto(20, 65, resultado_texto, color=\"#10b981\" if not hay_choque else \"#ef4444\", tamano=13)\n\nprint(f\"Estado de físicas 2D: {resultado_texto}\")\nprint(f\"Coordenadas Jugador: ({jugador['x']}, {jugador['y']}) | Obstáculo: ({obstaculo['x']}, {obstaculo['y']})\")\n",
+    "salidaEsperada": "Estado de físicas 2D: [ESTADO] Trayectoria despejada (Sin impacto)\nCoordenadas Jugador: (80, 140) | Obstáculo: (240, 140)"
+  },
+  "reglas_validacion": {
+    "titulo_desafio": "Validación de Motor Gráfico 2D y Colisiones",
+    "puntos_progreso": 200,
+    "reglas": [
+      {
+        "id": "canvas_limpiar",
+        "descripcion": "Limpiar el lienzo con campus.limpiar()",
+        "patron": "campus\\.limpiar\\s*\\(",
+        "tipo": "regex",
+        "pista_error": "🎨 Pista del Tutor: Todo frame debe comenzar limpiando el buffer previo. ¿Llamaste a 'campus.limpiar()'?"
+      },
+      {
+        "id": "canvas_dibujar",
+        "descripcion": "Renderizar entidades usando campus.dibujar_rectangulo o circulo",
+        "patron": "campus\\.dibujar_(rectangulo|circulo)",
+        "tipo": "regex",
+        "pista_error": "👾 Pista del Tutor: ¿Dibujaste tu personaje u obstáculo usando 'campus.dibujar_rectangulo(...)'?"
+      },
+      {
+        "id": "hitbox_colision",
+        "descripcion": "Implementar lógica de colisión o visualizador de hitboxes",
+        "patron": "(colision|caja_colision|verificar_colision)",
+        "tipo": "regex",
+        "pista_error": "💥 Pista del Tutor: Recuerda implementar o verificar las cajas de colisión (Hitboxes) entre las entidades."
+      }
+    ]
+  },
+  "mision": {
+    "titulo": "Misión Práctica 26: El Esquivador de Obstáculos",
+    "nivel": "Avanzado",
+    "puntosXP": 200,
+    "contexto": "Posiciona al jugador en la parte inferior de la pantalla y dibuja 3 obstáculos cayendo con diferentes colores y tamaños.",
+    "requerimientos": [
+      "Crear 3 obstáculos con coordenadas independientes.",
+      "Dibujar sus respectivas hitboxes de colisión.",
+      "Mostrar el puntaje actual en el HUD superior."
+    ],
+    "pistas": ["Usa campus.escribir_texto(x, y, f'Score: {puntaje}') para el HUD."],
+    "codigoPlantilla": "# Desarrolla tu juego 2D aquí\n"
+  },
+  "recursos": {
+    "video": {
+      "tipo": "youtube",
+      "url": "https://www.youtube.com/embed/videoseries?list=PLinedj3B308D_Q_F9f_Vb_V-59xS6W7zR",
+      "titulo": "Clase Grabada: Fundamentos de Motores Gráficos 2D y Físicas",
+      "duracion": "48 min"
+    },
+    "descargas": [
+      {
+        "nombre": "Guia_Fisicas_2D_Colisiones.pdf",
+        "descripcion": "Manual de álgebra vectorial y algoritmo de colisión AABB",
+        "tamano": "2.9 MB",
+        "tipo": "pdf",
+        "url": "#"
+      }
+    ],
+    "enlaces": [
+      {
+        "titulo": "Documentación Oficial Pygame",
+        "url": "https://www.pygame.org/docs/"
+      }
+    ]
+  }
+}

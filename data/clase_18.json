@@ -1,0 +1,115 @@
+{
+  "id": 18,
+  "numero": 18,
+  "moduloId": 4,
+  "moduloNombre": "Módulo 4: Persistencia y Bases de Datos Relacionales (SQL)",
+  "titulo": "Bases de Datos Relacionales: Consultas SQL, Filtros y Tablas",
+  "descripcionCorta": "Domina el lenguaje SQL estándar para modelar tablas, insertar registros de prueba y realizar consultas estructuradas con SELECT, WHERE, ORDER BY y funciones de agregación.",
+  "duracionEstimada": "3 Horas de cátedra",
+  "dificultad": "Intermedio",
+  "profesor": "Equipo Docente CFP N° 403 Mercedes",
+  "tipo_entorno": "consola_sql",
+  "briefing": {
+    "introduccion": "En el desarrollo de software moderno, los datos deben persistir de manera organizada, consistente y segura. El lenguaje SQL (Structured Query Language) es el estándar internacional para dialogar con bases de datos relacionales como SQLite, PostgreSQL y MySQL.\n\nEn esta clase aprenderás la sintaxis fundamental de SQL para crear tablas, insertar datos y realizar consultas analíticas.",
+    "secciones": [
+      {
+        "id": "sec-sql-1",
+        "titulo": "1. Creación de Tablas (DDL) y Tipos de Datos",
+        "contenido": "La sentencia `CREATE TABLE` define la estructura de una entidad relacional. Cada columna debe poseer un tipo de dato y restricciones (`PRIMARY KEY`, `NOT NULL`, `DEFAULT`).",
+        "codigo": "CREATE TABLE IF NOT EXISTS alumnos (\n    id INTEGER PRIMARY KEY AUTOINCREMENT,\n    nombre TEXT NOT NULL,\n    curso TEXT NOT NULL,\n    calificacion REAL DEFAULT 0.0,\n    activo INTEGER DEFAULT 1\n);"
+      },
+      {
+        "id": "sec-sql-2",
+        "titulo": "2. Inserción de Registros (DML)",
+        "contenido": "Para poblar las tablas con datos reales utilizamos `INSERT INTO` especificando las columnas de destino y sus valores correspondientes:",
+        "codigo": "INSERT INTO alumnos (nombre, curso, calificacion)\nVALUES ('Lucas Benítez', 'Programación Web', 8.5),\n       ('Mariana Gómez', 'Programación Web', 9.2),\n       ('Nicolás Rossi', 'Redes', 6.8);"
+      },
+      {
+        "id": "sec-sql-3",
+        "titulo": "3. Extracción y Filtrado con SELECT y WHERE",
+        "contenido": "La sentencia `SELECT` permite recuperar datos específicos. Mediante la cláusula `WHERE` aplicamos condiciones lógicas para filtrar solo los registros de interés.",
+        "codigo": "SELECT id, nombre, calificacion \nFROM alumnos \nWHERE calificacion >= 7.0 \nORDER BY calificacion DESC;"
+      }
+    ],
+    "conclusiones": [
+      "SQL es el lenguaje declarativo estándar para bases de datos relacionales.",
+      "DDL (CREATE, ALTER, DROP) define la estructura; DML (INSERT, SELECT, UPDATE, DELETE) manipula los datos.",
+      "Las consultas SELECT deben recuperar únicamente las columnas requeridas para optimizar el rendimiento."
+    ]
+  },
+  "sandbox": {
+    "archivoNombre": "consultas_alumnos.sql",
+    "codigoInicial": "-- ============================================================\n-- CFP N° 403 Mercedes - Clase 18: Laboratorio SQL Relacional\n-- ============================================================\n\n-- 1. Crear tabla de inscripciones\nCREATE TABLE alumnos (\n    id INTEGER PRIMARY KEY AUTOINCREMENT,\n    nombre TEXT NOT NULL,\n    especialidad TEXT NOT NULL,\n    promedio REAL NOT NULL\n);\n\n-- 2. Insertar datos de prueba del CFP 403\nINSERT INTO alumnos (nombre, especialidad, promedio) VALUES\n('Agustina Rossi', 'Desarrollo de Software', 9.5),\n('Mariano Ivaldi', 'Desarrollo de Software', 8.8),\n('Camila Torres', 'Desarrollo Web', 7.4),\n('Juan Pérez', 'Redes Informáticas', 6.5),\n('Sofía Martínez', 'Desarrollo de Software', 9.1);\n\n-- 3. Consulta de prueba: Alumnos destacados con promedio mayor a 8.0\nSELECT id, nombre, especialidad, promedio \nFROM alumnos \nWHERE promedio >= 8.0 \nORDER BY promedio DESC;\n",
+    "salidaEsperada": "Tabla 'alumnos' generada con 5 registros. 3 filas devueltas por la consulta SELECT."
+  },
+  "reglas_validacion": {
+    "titulo_desafio": "Validación de Sentencia SQL Relacional",
+    "puntos_progreso": 150,
+    "reglas": [
+      {
+        "id": "sql_create",
+        "descripcion": "Crear una tabla con CREATE TABLE",
+        "patron": "CREATE\\s+TABLE",
+        "tipo": "regex",
+        "pista_error": "🤔 Pista del Tutor: ¿Definiste tu estructura con 'CREATE TABLE nombre_tabla (...)'?"
+      },
+      {
+        "id": "sql_insert",
+        "descripcion": "Insertar registros con INSERT INTO",
+        "patron": "INSERT\\s+INTO",
+        "tipo": "regex",
+        "pista_error": "💡 Pista del Tutor: Para probar tu base necesitas datos. ¿Usaste 'INSERT INTO tabla (...) VALUES (...)'?"
+      },
+      {
+        "id": "sql_select",
+        "descripcion": "Consultar datos con SELECT y FROM",
+        "patron": "SELECT\\s+[\\s\\S]+?\\s+FROM",
+        "tipo": "regex",
+        "pista_error": "🔍 Pista del Tutor: ¿Escribiste una consulta 'SELECT columnas FROM tabla' para visualizar la información?"
+      },
+      {
+        "id": "sql_where",
+        "descripcion": "Filtrar resultados con cláusula WHERE",
+        "patron": "WHERE\\s+[a-zA-Z0-9_]+",
+        "tipo": "regex",
+        "pista_error": "📐 Pista del Tutor: Recuerda filtrar los registros usando la cláusula 'WHERE condición' (ej: WHERE promedio >= 8.0)."
+      }
+    ]
+  },
+  "mision": {
+    "titulo": "Misión Práctica 18: Padrón de Talleres Municipales",
+    "nivel": "Intermedio",
+    "puntosXP": 150,
+    "contexto": "Crea una base de datos relacional para gestionar los cursos del CFP 403 y los cupos disponibles.",
+    "requerimientos": [
+      "Crear la tabla `cursos` con columnas `id`, `nombre`, `docente` y `cupo`.",
+      "Insertar al menos 4 cursos del CFP 403.",
+      "Realizar una consulta SELECT ordenada alfabéticamente por nombre de curso."
+    ],
+    "pistas": ["Usa ORDER BY nombre ASC al final de tu SELECT."],
+    "codigoPlantilla": "-- Escribe tu solución SQL aquí\n"
+  },
+  "recursos": {
+    "video": {
+      "tipo": "youtube",
+      "url": "https://www.youtube.com/embed/videoseries?list=PLinedj3B308D_Q_F9f_Vb_V-59xS6W7zR",
+      "titulo": "Clase Grabada: Introducción a SQL y Bases de Datos Relacionales",
+      "duracion": "44 min"
+    },
+    "descargas": [
+      {
+        "nombre": "CheatSheet_SQL_CFP403.pdf",
+        "descripcion": "Hoja de referencia rápida de comandos SQL DDL y DML",
+        "tamano": "1.8 MB",
+        "tipo": "pdf",
+        "url": "#"
+      }
+    ],
+    "enlaces": [
+      {
+        "titulo": "SQLBolt - Lecciones Interactivas de SQL",
+        "url": "https://sqlbolt.com/"
+      }
+    ]
+  }
+}

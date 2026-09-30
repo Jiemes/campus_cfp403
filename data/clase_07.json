@@ -1,0 +1,93 @@
+{
+  "id": 7,
+  "numero": 7,
+  "moduloId": 2,
+  "moduloNombre": "Módulo 2: Control de Versiones con Git y Ecosistema de Desarrollo",
+  "titulo": "Control de Versiones con Git y GitHub: Comandos Básicos y Flujo de Trabajo",
+  "descripcionCorta": "Aprende a gestionar proyectos con Git. Dominarás el ciclo completo: inicializar un repositorio (git init), registrar cambios (git add, git commit), revisar el historial (git log) y sincronizar ramas con GitHub.",
+  "duracionEstimada": "2.5 Horas de cátedra",
+  "dificultad": "Inicial-Intermedio",
+  "profesor": "Equipo Docente CFP N° 403 Mercedes",
+  "tipo_entorno": "terminal_git",
+  "briefing": {
+    "introduccion": "Git es el sistema de control de versiones distribuido más utilizado en la industria mundial del software. Permite registrar cada modificación en el código fuente, colaborar en equipo sin sobrescribir el trabajo de otros desarrolladores y volver a versiones previas en caso de errores.\n\nEn esta práctica interactiva utilizarás la terminal de comandos para inicializar repositorios, crear commits descriptivos y preparar tus proyectos para GitHub.",
+    "secciones": [
+      {
+        "id": "sec-git-1",
+        "titulo": "1. Las Tres Áreas de Git",
+        "contenido": "Un repositorio de Git se divide en tres estados fundamentales:\n* **Working Directory (Directorio de Trabajo):** Tus archivos locales sin procesar.\n* **Staging Area (Área de Preparación):** Archivos marcados con `git add` para formar parte del próximo commit.\n* **Repository / Commit History (Historial Confirmado):** Instantáneas seguras registradas con `git commit`."
+      },
+      {
+        "id": "sec-git-2",
+        "titulo": "2. Comandos Esenciales",
+        "contenido": "Los comandos que utilizarás a diario como programador:\n* `git init`: Inicializa un nuevo repositorio en la carpeta actual.\n* `git status`: Informa el estado de los archivos (modificados, en preparación o sin seguimiento).\n* `git add <archivo>` o `git add .`: Mueve cambios al Staging Area.\n* `git commit -m \"mensaje\"`: Asienta una versión permanente.\n* `git log --oneline`: Muestra la lista histórica de commits."
+      }
+    ],
+    "conclusiones": [
+      "Cada commit debe representar una unidad de cambio lógica y contener un mensaje claro.",
+      "Siempre verifica el estado con `git status` antes y después de cada confirmación.",
+      "El historial inmutable de Git protege el proyecto ante pérdidas accidentales."
+    ]
+  },
+  "sandbox": {
+    "archivoNombre": "terminal_git_bash",
+    "codigoInicial": "# Escribe comandos git en la terminal interactiva inferior\n# Ejemplos: git status | git add . | git commit -m \"Primer commit\" | git log",
+    "salidaEsperada": "Repositorio listo. Ejecuta 'git status' o 'git --help'."
+  },
+  "reglas_validacion": {
+    "titulo_desafio": "Validación de Flujo Git en Terminal",
+    "puntos_progreso": 150,
+    "reglas": [
+      {
+        "id": "git_add",
+        "descripcion": "Preparar archivos con git add",
+        "patron": "git\\s+add",
+        "tipo": "regex",
+        "pista_error": "🤔 Pista del Tutor: ¿Agregaste tus cambios al staging area con 'git add .' o 'git add <archivo>'?"
+      },
+      {
+        "id": "git_commit",
+        "descripcion": "Confirmar cambios con git commit y mensaje",
+        "patron": "git\\s+commit\\s+-m",
+        "tipo": "regex",
+        "pista_error": "💡 Pista del Tutor: Recuerda confirmar los cambios usando 'git commit -m \"descripción del cambio\"'."
+      }
+    ]
+  },
+  "mision": {
+    "titulo": "Misión Práctica 7: Publicando el Primer Proyecto del CFP 403",
+    "nivel": "Inicial",
+    "puntosXP": 150,
+    "contexto": "Inicializa el repositorio local, añade los archivos del proyecto y genera el commit inicial siguiendo las directrices de la cátedra.",
+    "requerimientos": [
+      "Verificar el estado del repositorio con `git status`.",
+      "Agregar todos los archivos modificados con `git add .`.",
+      "Realizar el commit con `git commit -m \"feat: inicio del proyecto CFP 403\"`."
+    ],
+    "pistas": ["Recuerda escribir las comillas en el mensaje del commit."],
+    "codigoPlantilla": ""
+  },
+  "recursos": {
+    "video": {
+      "tipo": "youtube",
+      "url": "https://www.youtube.com/embed/videoseries?list=PLinedj3B308D_Q_F9f_Vb_V-59xS6W7zR",
+      "titulo": "Clase Grabada: Flujo de Trabajo Profesional con Git y GitHub",
+      "duracion": "38 min"
+    },
+    "descargas": [
+      {
+        "nombre": "Guia_Comandos_Git_CFP403.pdf",
+        "descripcion": "Cheat Sheet de Git con ramas, merges y comandos de emergencia",
+        "tamano": "1.4 MB",
+        "tipo": "pdf",
+        "url": "#"
+      }
+    ],
+    "enlaces": [
+      {
+        "titulo": "Git Cheatsheet Oficial (GitHub)",
+        "url": "https://training.github.com/"
+      }
+    ]
+  }
+}

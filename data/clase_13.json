@@ -1,0 +1,172 @@
+{
+  "id": 13,
+  "numero": 13,
+  "moduloId": 3,
+  "moduloNombre": "Módulo 3: Programación Orientada a Objetos (POO)",
+  "titulo": "Paradigma POO: Clases, Instancias, Atributos y Método __init__",
+  "descripcionCorta": "Comprende los fundamentos de la Programación Orientada a Objetos en Python. Aprenderás a modelar entidades del mundo real mediante clases, definir atributos de instancia, inicializar objetos con el constructor __init__ y escribir métodos operativos con el parámetro self.",
+  "duracionEstimada": "3 Horas de cátedra",
+  "dificultad": "Intermedio",
+  "profesor": "Equipo Docente CFP N° 403 Mercedes",
+  "tipo_entorno": "consola_texto",
+  "briefing": {
+    "introduccion": "Hasta este punto del curso, hemos trabajado bajo el enfoque de la Programación Estructurada o Imperativa: definíamos variables sueltas y funciones que operaban sobre ellas. Si bien este modelo es excelente para tareas directas, a medida que un software crece en complejidad, mantener los datos y la lógica separados genera código frágil, propenso a errores y difícil de escalar. La Programación Orientada a Objetos (POO) surge como una respuesta a este problema: nos permite agrupar datos (atributos) y los comportamientos que operan sobre ellos (métodos) en una única unidad lógica llamada **Objeto**.",
+    "secciones": [
+      {
+        "id": "sec-1",
+        "titulo": "1. El Salto Conceptual: ¿Qué es una Clase y qué es un Objeto?",
+        "contenido": "Una **Clase** es un molde, plantilla o plano arquitectónico. En el mundo de la ingeniería o la arquitectura, el plano de una casa no es la casa en sí misma: es la descripción formal de cuántas habitaciones tendrá, qué materiales usar y cómo se distribuye el espacio.\n\nPor el contrario, un **Objeto** (o **instancia**) es la materialización concreta de ese plano. A partir de un único plano arquitectónico podemos edificar 50 casas en un barrio; cada una tendrá su propia dirección postal, su propio color de pared y sus propios habitantes, pero todas compartirán la misma estructura base definida en el plano.",
+        "callout": {
+          "tipo": "tip",
+          "titulo": "Regla de Nomenclatura PEP 8",
+          "texto": "En Python, los nombres de las clases se escriben siempre en formato **PascalCase** (o UpperCamelCase), por ejemplo: `CuentaBancaria`, `VehiculoElectrico`, `EstudianteCFP`. Nunca uses snake_case para nombrar clases."
+        }
+      },
+      {
+        "id": "sec-2",
+        "titulo": "2. Anatomía de una Clase en Python y la palabra reservada 'class'",
+        "contenido": "Para definir una clase en Python utilizamos la palabra reservada `class`, seguida del nombre de la clase y dos puntos `:`. Dentro del bloque indentado colocaremos los atributos y las funciones asociadas (que en este contexto reciben el nombre formal de **métodos**).",
+        "codigo": "# Definición de la clase más simple posible\nclass Alumno:\n    institucion = \"CFP N° 403 Mercedes\"  # Atributo de clase (compartido por todas las instancias)\n\n# Instanciación (creación de objetos)\nalumno_1 = Alumno()\nalumno_2 = Alumno()\n\nprint(type(alumno_1))  # Salida: <class '__main__.Alumno'>\nprint(alumno_1.institucion)  # Salida: CFP N° 403 Mercedes"
+      },
+      {
+        "id": "sec-3",
+        "titulo": "3. El Constructor y el Método Mágico __init__",
+        "contenido": "En Python, el método `__init__` es conocido popularmente como el **constructor**. Se ejecuta automáticamente cada vez que creamos una nueva instancia de la clase. Su función primordial es inicializar el estado del objeto, asignando valores a sus atributos individuales.\n\nLos métodos que empiezan y terminan con doble guión bajo (`__`) se denominan **métodos dunder** (double underscore) o métodos mágicos. Python los invoca internamente ante determinados eventos del ciclo de vida del objeto.",
+        "codigo": "class Alumno:\n    def __init__(self, nombre, legajo, curso):\n        # Atributos de instancia (propios de cada alumno)\n        self.nombre = nombre\n        self.legajo = legajo\n        self.curso = curso\n        self.calificaciones = []\n        self.asistencia_pct = 100.0\n\n# Cada instancia recibe sus propios datos\nestudiante_ana = Alumno(\"Ana Gómez\", 1042, \"Programación\")\nestudiante_juan = Alumno(\"Juan Pérez\", 1043, \"Programación\")\n\nprint(f\"Estudiante: {estudiante_ana.nombre} | Legajo: {estudiante_ana.legajo}\")\nprint(f\"Estudiante: {estudiante_juan.nombre} | Legajo: {estudiante_juan.legajo}\")"
+      },
+      {
+        "id": "sec-4",
+        "titulo": "4. El misterio revelado de 'self': ¿Por qué es obligatorio?",
+        "contenido": "Una de las dudas más frecuentes de los programadores novatos es: *¿Qué significa ese primer parámetro 'self' que aparece en todos los métodos?*\n\n`self` hace referencia **a la instancia concreta que está ejecutando el método**. Dado que una clase puede tener miles de objetos vivos en memoria al mismo tiempo, cuando llamas a `estudiante_ana.mostrar_ficha()`, Python necesita saber de cuál de todos los alumnos debe leer los datos. Entre bastidores, Python traduce esa llamada en: `Alumno.mostrar_ficha(estudiante_ana)`.\n\nPor lo tanto, `self` es el puente que permite a los métodos acceder y modificar los atributos de ese objeto específico.",
+        "callout": {
+          "tipo": "important",
+          "titulo": "Atención técnica con self",
+          "texto": "Aunque técnicamente podrías llamarlo de otra forma (como 'this' en Java o C++), la convención estricta en el ecosistema Python mundial es usar 'self'. Romper esta regla se considera una pésima práctica."
+        }
+      },
+      {
+        "id": "sec-5",
+        "titulo": "5. Métodos de Instancia: Dotando de Comportamiento a los Objetos",
+        "contenido": "Los métodos no son más que funciones definidas dentro de la clase. A través de ellos, los objetos interactúan con su propio estado interno y con el exterior. Veamos cómo agregar lógica de negocio completa:",
+        "codigo": "class AlumnoCFP:\n    def __init__(self, nombre, legajo):\n        self.nombre = nombre\n        self.legajo = legajo\n        self.notas = []\n        self.estado = \"Cursando\"\n\n    def registrar_nota(self, calificacion):\n        if 1 <= calificacion <= 10:\n            self.notas.append(calificacion)\n            print(f\"[OK] Nota {calificacion} cargada para {self.nombre}\")\n        else:\n            print(f\"[ERROR] La calificación {calificacion} es inválida (debe ser entre 1 y 10)\")\n\n    def calcular_promedio(self):\n        if not self.notas:\n            return 0.0\n        return sum(self.notas) / len(self.notas)\n\n    def verificar_aprobacion(self):\n        prom = self.calcular_promedio()\n        if prom >= 7.0:\n            self.estado = \"Promocionado\"\n        elif prom >= 4.0:\n            self.estado = \"Aprobado (Final)\"\n        else:\n            self.estado = \"Desaprobado\"\n        return self.estado"
+      }
+    ],
+    "conclusiones": [
+      "Las Clases definen la estructura y comportamiento; los Objetos son las instancias vivas en memoria.",
+      "El método `__init__` se ejecuta al nacer el objeto y establece sus variables internas (atributos de instancia).",
+      "El parámetro `self` garantiza que cada objeto manipule exclusivamente sus propios datos.",
+      "La POO permite un nivel de modularidad y reutilización de código indispensable para proyectos de gran escala."
+    ]
+  },
+  "sandbox": {
+    "lenguaje": "python",
+    "archivoNombre": "clase_13_poo.py",
+    "codigoInicial": "# ============================================================\n# CFP N° 403 Mercedes - Clase 13: Laboratorio de POO\n# Práctica interactiva: Sistema de Gestión de Alumnos y Talleres\n# ============================================================\n\nclass TallerProgramacion:\n    \"\"\"Representa un curso del Centro de Formación Profesional N° 403\"\"\"\n    def __init__(self, nombre, cupo_maximo):\n        self.nombre = nombre\n        self.cupo_maximo = cupo_maximo\n        self.estudiantes = []\n\n    def inscribir_estudiante(self, nombre_estudiante):\n        if len(self.estudiantes) < self.cupo_maximo:\n            self.estudiantes.append(nombre_estudiante)\n            print(f\"[ÉXITO] {nombre_estudiante} inscripto/a en {self.nombre}.\")\n            return True\n        else:\n            print(f\"[ALERTA] Cupo agotado en {self.nombre}. No se pudo inscribir a {nombre_estudiante}.\")\n            return False\n\n    def listar_estudiantes(self):\n        print(f\"\\n--- Nómina de Estudiantes: {self.nombre} ({len(self.estudiantes)}/{self.cupo_maximo}) ---\")\n        for i, est in enumerate(self.estudiantes, start=1):\n            print(f\"  {i}. {est}\")\n        print(\"-\" * 50)\n\n# --- ZONA DE PRUEBAS ---\n# 1. Creamos una instancia del taller\ncurso_python = TallerProgramacion(\"Desarrollo de Software CFP 403\", cupo_maximo=3)\n\n# 2. Inscribimos alumnos\ncurso_python.inscribir_estudiante(\"Agustina Rossi\")\ncurso_python.inscribir_estudiante(\"Mariano Ivaldi\")\ncurso_python.inscribir_estudiante(\"Camila Torres\")\n\n# 3. Intentamos superar el cupo\ncurso_python.inscribir_estudiante(\"Lucas Benítez\")\n\n# 4. Imprimimos el estado final\ncurso_python.listar_estudiantes()\n",
+    "salidaEsperada": "[ÉXITO] Agustina Rossi inscripto/a en Desarrollo de Software CFP 403.\n[ÉXITO] Mariano Ivaldi inscripto/a en Desarrollo de Software CFP 403.\n[ÉXITO] Camila Torres inscripto/a en Desarrollo de Software CFP 403.\n[ALERTA] Cupo agotado en Desarrollo de Software CFP 403. No se pudo inscribir a Lucas Benítez.\n\n--- Nómina de Estudiantes: Desarrollo de Software CFP 403 (3/3) ---\n  1. Agustina Rossi\n  2. Mariano Ivaldi\n  3. Camila Torres\n--------------------------------------------------"
+  },
+  "reglas_validacion": {
+    "titulo_desafio": "Validación de Estructura de Clase y Constructor POO",
+    "puntos_progreso": 150,
+    "reglas": [
+      {
+        "id": "definicion_clase",
+        "descripcion": "Definir una clase con sintaxis PEP 8 y PascalCase",
+        "patron": "class\\s+[A-Z][a-zA-Z0-9_]*\\s*:",
+        "tipo": "regex",
+        "pista_error": "🤔 Pista del Tutor: ¿Declaraste la clase usando 'class' seguido de un nombre en PascalCase (iniciando con mayúscula, ej. class Alumno:) y dos puntos?"
+      },
+      {
+        "id": "constructor_init",
+        "descripcion": "Implementar el método constructor __init__",
+        "patron": "def\\s+__init__\\s*\\(",
+        "tipo": "regex",
+        "pista_error": "💡 Pista del Tutor: ¿Implementaste el constructor '__init__'? Recuerda que lleva dos guiones bajos antes y después de 'init' (método mágico dunder)."
+      },
+      {
+        "id": "parametro_self",
+        "descripcion": "Incluir 'self' como primer parámetro obligatorio",
+        "patron": "def\\s+[a-zA-Z0-9_]+\\s*\\(\\s*self[\\s,)]",
+        "tipo": "regex",
+        "pista_error": "⚠️ Pista del Tutor: ¿Olvidaste pasar 'self' como primer parámetro en la firma del método o constructor? Python lo necesita para identificar la instancia."
+      },
+      {
+        "id": "atributos_instancia",
+        "descripcion": "Asignar atributos a la instancia mediante self.atributo =",
+        "patron": "self\\.[a-zA-Z0-9_]+\\s*=",
+        "tipo": "regex",
+        "pista_error": "🔍 Pista del Tutor: No se detectan asignaciones a la instancia. Recuerda enlazar las variables usando 'self.nombre_variable = ...' dentro de tu método."
+      },
+      {
+        "id": "sangria_indentacion",
+        "descripcion": "Verificar la indentación estándar de 4 espacios",
+        "patron": "^\\s{4,}(def|self|if|return|print)",
+        "tipo": "multiline_regex",
+        "pista_error": "📐 Pista del Tutor: Revisa la sangría (indentación). El cuerpo de la clase y de los métodos en Python deben tener una sangría de al menos 4 espacios."
+      }
+    ]
+  },
+  "mision": {
+    "titulo": "Misión Práctica 13: El Gestor de Flota Municipal de Mercedes",
+    "nivel": "Intermedio",
+    "puntosXP": 150,
+    "contexto": "El Municipio de Mercedes necesita informatizar el control de su flota de vehículos de servicios públicos (camiones recolectores, camionetas de alumbrado y ambulancias). Tu tarea como desarrollador es modelar la clase principal del sistema utilizando POO en Python.",
+    "requerimientos": [
+      "Crear una clase llamada `VehiculoMunicipal` con constructor `__init__` que reciba `patente`, `tipo_servicio` (ej: 'Alumbrado', 'Salud') y `capacidad_tanque_litros`.",
+      "Inicializar el atributo `combustible_actual` en el 100% de la capacidad del tanque.",
+      "Crear un método `realizar_recorrido(kilometros)` que consuma 1 litro de combustible cada 8 km recorridos. Si el combustible no alcanza, debe rechazar el viaje con un mensaje explicativo.",
+      "Crear un método `cargar_combustible(litros)` que sume combustible sin sobrepasar la capacidad máxima del tanque.",
+      "Crear un método `obtener_informe()` que retorne un string formateado con el estado completo del vehículo."
+    ],
+    "pistas": [
+      "Para calcular el consumo en litros: `consumo = kilometros / 8`.",
+      "En `cargar_combustible`, usa `min(self.combustible_actual + litros, self.capacidad_tanque_litros)` para evitar rebalses.",
+      "Usa f-strings para retornar un informe prolijo con valores redondeados a 2 decimales."
+    ],
+    "codigoPlantilla": "class VehiculoMunicipal:\n    def __init__(self, patente, tipo_servicio, capacidad_tanque_litros):\n        # TU CÓDIGO AQUÍ\n        pass\n\n    def realizar_recorrido(self, kilometros):\n        # TU CÓDIGO AQUÍ\n        pass\n\n    def cargar_combustible(self, litros):\n        # TU CÓDIGO AQUÍ\n        pass\n\n    def obtener_informe(self):\n        # TU CÓDIGO AQUÍ\n        pass\n\n# Prueba tu código instanciando un móvil municipal:\nmovil1 = VehiculoMunicipal(\"AF-342-XY\", \"Alumbrado Público\", 60)\n"
+  },
+  "recursos": {
+    "video": {
+      "tipo": "youtube",
+      "url": "https://www.youtube.com/embed/videoseries?list=PLinedj3B308D_Q_F9f_Vb_V-59xS6W7zR",
+      "titulo": "Clase Grabada: Introducción Práctica a la POO en Python",
+      "duracion": "42:15 min"
+    },
+    "descargas": [
+      {
+        "nombre": "Guia_Teorica_POO_Clase13.pdf",
+        "descripcion": "Apunte de cátedra oficial con diagramas de clases y estándares PEP 8",
+        "tamano": "2.4 MB",
+        "tipo": "pdf",
+        "url": "#"
+      },
+      {
+        "nombre": "ejemplos_clase_13.py",
+        "descripcion": "Script Python con todos los ejemplos y casos de uso vistos en clase",
+        "tamano": "14 KB",
+        "tipo": "python",
+        "url": "#"
+      },
+      {
+        "nombre": "solucionario_desafio_13.py",
+        "descripcion": "Resolución guiada con comentarios y buenas prácticas",
+        "tamano": "8 KB",
+        "tipo": "python",
+        "url": "#"
+      }
+    ],
+    "enlaces": [
+      {
+        "titulo": "Documentación Oficial de Python 3 - Clases y Objetos",
+        "url": "https://docs.python.org/es/3/tutorial/classes.html"
+      },
+      {
+        "titulo": "Guía de Estilo PEP 8 para Código Python",
+        "url": "https://peps.python.org/pep-0008/"
+      },
+      {
+        "titulo": "Portal Oficial CFP N° 403 Mercedes",
+        "url": "https://www.cfp403.com"
+      }
+    ]
+  }
+}

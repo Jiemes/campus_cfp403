@@ -1,0 +1,86 @@
+{
+  "institucion": "Centro de Formación Profesional N° 403 - Mercedes",
+  "curso": "Trayecto Formativo en Programación y Desarrollo de Software",
+  "totalClases": 37,
+  "modulos": [
+    {
+      "id": 1,
+      "nombre": "Módulo 1: Fundamentos de Lógica y Algoritmos con PSeInt",
+      "rango": "Clases 1 a 6",
+      "clases": [
+        {"id": 1, "numero": 1, "titulo": "Introducción al Pensamiento Computacional y Pseudocódigo", "duracion": "2h", "archivo": "clase_01.json"},
+        {"id": 2, "numero": 2, "titulo": "Variables, Tipos de Datos y Operadores en PSeInt", "duracion": "2h", "archivo": "clase_02.json"},
+        {"id": 3, "numero": 3, "titulo": "Estructuras de Control Condicional: Si-Entonces y Según", "duracion": "2.5h", "archivo": "clase_03.json"},
+        {"id": 4, "numero": 4, "titulo": "Estructuras Repetitivas: Mientras, Repetir y Para", "duracion": "2.5h", "archivo": "clase_04.json"},
+        {"id": 5, "numero": 5, "titulo": "Arreglos Unidimensionales (Vectores) y Algoritmos Clásicos", "duracion": "3h", "archivo": "clase_05.json"},
+        {"id": 6, "numero": 6, "titulo": "Subprocesos, Funciones y Modularización en PSeInt", "duracion": "3h", "archivo": "clase_06.json"}
+      ]
+    },
+    {
+      "id": 2,
+      "nombre": "Módulo 2: Fundamentos del Lenguaje Python",
+      "rango": "Clases 7 a 12",
+      "clases": [
+        {"id": 7, "numero": 7, "titulo": "Migración a Python: Sintaxis, Variables y Función print()/input()", "duracion": "2h", "archivo": "clase_07.json"},
+        {"id": 8, "numero": 8, "titulo": "Control de Flujo en Python: if, elif, else y Operadores Lógicos", "duracion": "2h", "archivo": "clase_08.json"},
+        {"id": 9, "numero": 9, "titulo": "Colecciones Dinámicas: Listas y Tuplas en Profundidad", "duracion": "2.5h", "archivo": "clase_09.json"},
+        {"id": 10, "numero": 10, "titulo": "Diccionarios y Conjuntos (Sets): Estructuras Clave-Valor", "duracion": "2.5h", "archivo": "clase_10.json"},
+        {"id": 11, "numero": 11, "titulo": "Funciones en Python: Parámetros, Retorno y Alcance (Scope)", "duracion": "3h", "archivo": "clase_11.json"},
+        {"id": 12, "numero": 12, "titulo": "Manejo de Errores y Excepciones: try, except, finally", "duracion": "2.5h", "archivo": "clase_12.json"}
+      ]
+    },
+    {
+      "id": 3,
+      "nombre": "Módulo 3: Programación Orientada a Objetos (POO)",
+      "rango": "Clases 13 a 18",
+      "clases": [
+        {"id": 13, "numero": 13, "titulo": "Paradigma POO: Clases, Instancias, Atributos y Método __init__", "duracion": "3h", "archivo": "clase_13.json"},
+        {"id": 14, "numero": 14, "titulo": "Encapsulamiento, Métodos Getters/Setters y Propiedades @property", "duracion": "2.5h", "archivo": "clase_14.json"},
+        {"id": 15, "numero": 15, "titulo": "Herencia Simple, Jerarquías y la Función super()", "duracion": "3h", "archivo": "clase_15.json"},
+        {"id": 16, "numero": 16, "titulo": "Polimorfismo, Duck Typing y Sobrescritura de Métodos", "duracion": "2.5h", "archivo": "clase_16.json"},
+        {"id": 17, "numero": 17, "titulo": "Métodos Especiales (Dunder Methods): __str__, __repr__, __len__", "duracion": "2.5h", "archivo": "clase_17.json"},
+        {"id": 18, "numero": 18, "titulo": "Proyecto Integrador POO: Arquitectura Modular de un Sistema", "duracion": "3.5h", "archivo": "clase_18.json"}
+      ]
+    },
+    {
+      "id": 4,
+      "nombre": "Módulo 4: Persistencia y Bases de Datos Relacionales (SQL)",
+      "rango": "Clases 19 a 24",
+      "clases": [
+        {"id": 19, "numero": 19, "titulo": "Modelado de Datos Relacional y Modelo Entidad-Relación", "duracion": "2h", "archivo": "clase_19.json"},
+        {"id": 20, "numero": 20, "titulo": "DDL SQL: Creación de Tablas, Tipos de Datos y Constraints", "duracion": "2.5h", "archivo": "clase_20.json"},
+        {"id": 21, "numero": 21, "titulo": "DML SQL: Consultas SELECT, WHERE, ORDER BY y Funciones de Agregación", "duracion": "3h", "archivo": "clase_21.json"},
+        {"id": 22, "numero": 22, "titulo": "Integración Python + SQLite3: Conexión, Cursores y Operaciones CRUD", "duracion": "3h", "archivo": "clase_22.json"},
+        {"id": 23, "numero": 23, "titulo": "Consultas Relacionales con JOINs y Normalización de Tablas", "duracion": "3h", "archivo": "clase_23.json"},
+        {"id": 24, "numero": 24, "titulo": "Transacciones ACID, Seguridad contra Inyecciones SQL y Patrón DAO", "duracion": "3h", "archivo": "clase_24.json"}
+      ]
+    },
+    {
+      "id": 5,
+      "nombre": "Módulo 5: Librerías Avanzadas, Automatización y APIs",
+      "rango": "Clases 25 a 30",
+      "clases": [
+        {"id": 25, "numero": 25, "titulo": "Manejo de Archivos CSV, JSON y Manejadores de Contexto (with)", "duracion": "2.5h", "archivo": "clase_25.json"},
+        {"id": 26, "numero": 26, "titulo": "Consumo de APIs REST con la librería Requests", "duracion": "3h", "archivo": "clase_26.json"},
+        {"id": 27, "numero": 27, "titulo": "Introducción a NumPy: Vectores y Matrices de Alto Rendimiento", "duracion": "3h", "archivo": "clase_27.json"},
+        {"id": 28, "numero": 28, "titulo": "Análisis y Manipulación de Datos con Pandas: Series y DataFrames", "duracion": "3.5h", "archivo": "clase_28.json"},
+        {"id": 29, "numero": 29, "titulo": "Visualización de Datos con Matplotlib y Seaborn", "duracion": "3h", "archivo": "clase_29.json"},
+        {"id": 30, "numero": 30, "titulo": "Interfaces Gráficas de Usuario (GUI) con Tkinter / CustomTkinter", "duracion": "3.5h", "archivo": "clase_30.json"}
+      ]
+    },
+    {
+      "id": 6,
+      "nombre": "Módulo 6: Desarrollo de Videojuegos con Pygame",
+      "rango": "Clases 31 a 37",
+      "clases": [
+        {"id": 31, "numero": 31, "titulo": "Introducción a Pygame: Ventana Principal, Game Loop y FPS", "duracion": "2.5h", "archivo": "clase_31.json"},
+        {"id": 32, "numero": 32, "titulo": "Control de Eventos: Teclado, Mouse y Movimiento de Objetos", "duracion": "3h", "archivo": "clase_32.json"},
+        {"id": 33, "numero": 33, "titulo": "Carga de Sprites, Imágenes y Animaciones Básicas", "duracion": "3h", "archivo": "clase_33.json"},
+        {"id": 34, "numero": 34, "titulo": "Detección de Colisiones (Hitboxes, Rectangles y Sprites Groups)", "duracion": "3.5h", "archivo": "clase_34.json"},
+        {"id": 35, "numero": 35, "titulo": "Audio, Efectos Sonoros, Música de Fondo y HUD de Puntuación", "duracion": "3h", "archivo": "clase_35.json"},
+        {"id": 36, "numero": 36, "titulo": "Gestión de Estados: Pantalla de Inicio, Victoria y Game Over", "duracion": "3.5h", "archivo": "clase_36.json"},
+        {"id": 37, "numero": 37, "titulo": "Proyecto Final: Construcción y Despliegue de un Videojuego 2D Completo", "duracion": "4h", "archivo": "clase_37.json"}
+      ]
+    }
+  ]
+}

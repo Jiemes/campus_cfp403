@@ -1,0 +1,166 @@
+{
+  "id": 22,
+  "numero": 22,
+  "moduloId": 4,
+  "moduloNombre": "Módulo 4: Persistencia y Bases de Datos Relacionales (SQL)",
+  "titulo": "Integración Python + SQLite3: Conexión, Cursores y Operaciones CRUD",
+  "descripcionCorta": "Aprende a conectar Python con el motor de base de datos relacional SQLite3. Dominarás el uso de conexiones seguras, objetos cursor, ejecución de consultas SQL parametrizadas para prevenir inyecciones y la implementación completa del ciclo CRUD.",
+  "duracionEstimada": "3 Horas de cátedra",
+  "dificultad": "Intermedio-Avanzado",
+  "profesor": "Equipo Docente CFP N° 403 Mercedes",
+  "tipo_entorno": "consola_sql",
+  "briefing": {
+    "introduccion": "Hasta ahora, todos los programas que desarrollamos almacenaban su información en variables volátiles en la memoria RAM: una vez que el script finalizaba o la computadora se apagaba, los datos desaparecían por completo. Para construir software del mundo real (sistemas de gestión, plataformas educativas, tiendas online), es imprescindible la **persistencia de datos**.\n\nEn esta clase integraremos el lenguaje Python con **SQLite3**, una base de datos relacional embebida que no requiere instalar ningún servidor adicional, ya que viene preinstalada en la biblioteca estándar de Python.",
+    "secciones": [
+      {
+        "id": "sec-1",
+        "titulo": "1. ¿Por qué SQLite3 en Python?",
+        "contenido": "SQLite es el motor de base de datos más desplegado del planeta (presente en teléfonos Android, navegadores web, sistemas operativos y aplicaciones de escritorio). Sus grandes ventajas son:\n\n* **Serverless (Sin Servidor):** No requiere configurar un servicio en segundo plano ni credenciales de red.\n* **Monolítico en un archivo:** Toda la base de datos (tablas, índices, disparadores y datos) se almacena en un único archivo con extensión `.db` o `.sqlite`.\n* **Cero configuración:** Viene incluida en la biblioteca estándar con tan solo hacer `import sqlite3`.",
+        "callout": {
+          "tipo": "tip",
+          "titulo": "Biblioteca Estándar",
+          "texto": "No necesitas ejecutar `pip install sqlite3`. El módulo `sqlite3` viene empaquetado de forma nativa con el intérprete de Python desde la versión 2.5."
+        }
+      },
+      {
+        "id": "sec-2",
+        "titulo": "2. El Flujo de Trabajo: Conexión y Cursor",
+        "contenido": "Para interactuar con una base de datos relacional desde Python intervienen dos componentes fundamentales:\n\n1. **Objeto Conexión (`Connection`):** Representa el canal abierto hacia el archivo de la base de datos.\n2. **Objeto Cursor (`Cursor`):** Es el puntero de trabajo que ejecuta las sentencias SQL y almacena temporalmente los resultados devueltos por el motor.",
+        "codigo": "import sqlite3\n\n# 1. Establecer conexión con el archivo de base de datos\nconexion = sqlite3.connect(\"centro_403.db\")\n\n# 2. Crear un cursor de trabajo\ncursor = conexion.cursor()\n\n# 3. Crear una tabla si no existe\ncursor.execute('''\n    CREATE TABLE IF NOT EXISTS cursos (\n        id INTEGER PRIMARY KEY AUTOINCREMENT,\n        nombre TEXT NOT NULL,\n        docente TEXT NOT NULL,\n        cupo INTEGER DEFAULT 25\n    )\n''')\n\n# 4. Confirmar cambios con commit y cerrar\nconexion.commit()\nconexion.close()"
+      },
+      {
+        "id": "sec-3",
+        "titulo": "3. El Ciclo CRUD Completo (Create, Read, Update, Delete)",
+        "contenido": "Cualquier sistema de información interactúa con la persistencia mediante cuatro operaciones esenciales:",
+        "codigo": "# CREATE (Inserción con consultas parametrizadas)\ncursor.execute(\n    \"INSERT INTO cursos (nombre, docente, cupo) VALUES (?, ?, ?)\",\n    (\"Programación en Python\", \"Prof. CFP 403\", 30)\n)\nconexion.commit()\n\n# READ (Lectura de registros)\ncursor.execute(\"SELECT id, nombre, docente, cupo FROM cursos WHERE cupo >= ?\", (20,))\nregistros = cursor.fetchall()\nfor fila in registros:\n    print(f\"ID: {fila[0]} | Curso: {fila[1]} | Docente: {fila[2]} | Cupo: {fila[3]}\")\n\n# UPDATE (Modificación de datos)\ncursor.execute(\"UPDATE cursos SET cupo = ? WHERE id = ?\", (35, 1))\nconexion.commit()\n\n# DELETE (Eliminación)\ncursor.execute(\"DELETE FROM cursos WHERE id = ?\", (1,))\nconexion.commit()"
+      },
+      {
+        "id": "sec-4",
+        "titulo": "4. Seguridad Crítica: Prevención de SQL Injection",
+        "contenido": "Nunca, bajo ninguna circunstancia, concatenes strings de usuario en tus consultas SQL (como `\"SELECT * FROM usuarios WHERE email = '\" + input_usuario + \"'\"`). Esto deja abierta la puerta a ataques catastróficos de **Inyección SQL**.\n\nUtiliza siempre **parámetros posicionales con `?`**; de este modo el driver de SQLite escapa automáticamente cualquier carácter malicioso.",
+        "callout": {
+          "tipo": "important",
+          "titulo": "Regla de Oro de Seguridad",
+          "texto": "Siempre pasa los valores como una tupla en el segundo argumento de `cursor.execute('... WHERE campo = ?', (valor,))`. Recuerda la coma si la tupla tiene un solo elemento."
+        }
+      }
+    ],
+    "conclusiones": [
+      "SQLite3 permite persistencia relacional local sin infraestructura de servidores.",
+      "El objeto `Cursor` ejecuta sentencias SQL y `Connection.commit()` asienta las transacciones en disco.",
+      "El uso de consultas parametrizadas con `?` es obligatorio para evitar vulnerabilidades de seguridad.",
+      "Manejar el cierre de conexiones mediante el bloque `with sqlite3.connect(...)` garantiza un cierre limpio de recursos."
+    ]
+  },
+  "sandbox": {
+    "lenguaje": "python",
+    "archivoNombre": "clase_22_sqlite.py",
+    "codigoInicial": "# ============================================================\n# CFP N° 403 Mercedes - Clase 22: Laboratorio de SQLite3\n# Práctica interactiva: Base de Datos de Inscripciones\n# ============================================================\nimport sqlite3\n\n# Creamos una base de datos en memoria RAM (:memory:) para pruebas rápidas\nconexion = sqlite3.connect(\":memory:\")\ncursor = conexion.cursor()\n\n# 1. Crear tabla de estudiantes\ncursor.execute('''\n    CREATE TABLE estudiantes (\n        id INTEGER PRIMARY KEY AUTOINCREMENT,\n        nombre TEXT NOT NULL,\n        especialidad TEXT NOT NULL,\n        promedio REAL\n    )\n''')\n\n# 2. Insertar registros de prueba\nalumnos = [\n    (\"Sofía Martínez\", \"Programación Web\", 9.2),\n    (\"Esteban Gómez\", \"Redes Informáticas\", 7.8),\n    (\"Lucía Morales\", \"Programación Web\", 8.5),\n    (\"Nicolás Vega\", \"Robótica\", 6.9)\n]\ncursor.executemany(\"INSERT INTO estudiantes (nombre, especialidad, promedio) VALUES (?, ?, ?)\", alumnos)\nconexion.commit()\n\n# 3. Consulta con filtro y ordenamiento\nprint(\"=== ESTUDIANTES DE 'Programación Web' (Ordenados por promedio) ===\")\ncursor.execute('''\n    SELECT id, nombre, promedio \n    FROM estudiantes \n    WHERE especialidad = ? \n    ORDER BY promedio DESC\n''', (\"Programación Web\",))\n\nfor fila in cursor.fetchall():\n    print(f\"  • Legajo #{fila[0]}: {fila[1]} -> Promedio: {fila[2]}\")\n\nconexion.close()\nprint(\"\\n[OK] Base de datos cerrada correctamente.\")\n",
+    "salidaEsperada": "=== ESTUDIANTES DE 'Programación Web' (Ordenados por promedio) ===\n  • Legajo #1: Sofía Martínez -> Promedio: 9.2\n  • Legajo #3: Lucía Morales -> Promedio: 8.5\n\n[OK] Base de datos cerrada correctamente."
+  },
+  "reglas_validacion": {
+    "titulo_desafio": "Validación de Conexión, Cursor y CRUD con SQLite3",
+    "puntos_progreso": 200,
+    "reglas": [
+      {
+        "id": "import_sqlite3",
+        "descripcion": "Importar el módulo estándar sqlite3",
+        "patron": "import\\s+sqlite3",
+        "tipo": "regex",
+        "pista_error": "🤔 Pista del Tutor: ¿Importaste el módulo necesario? Recuerda incluir 'import sqlite3' al inicio de tu script."
+      },
+      {
+        "id": "conexion_db",
+        "descripcion": "Establecer la conexión con sqlite3.connect()",
+        "patron": "sqlite3\\.connect\\s*\\(",
+        "tipo": "regex",
+        "pista_error": "💡 Pista del Tutor: ¿Abriste el canal de comunicación con la base de datos usando 'sqlite3.connect(...)'?"
+      },
+      {
+        "id": "creacion_cursor",
+        "descripcion": "Crear el objeto cursor para ejecutar sentencias",
+        "patron": "\\.cursor\\s*\\(\\)",
+        "tipo": "regex",
+        "pista_error": "⚠️ Pista del Tutor: Para interactuar con las tablas necesitas un puntero de trabajo. ¿Llamaste al método '.cursor()' sobre tu conexión?"
+      },
+      {
+        "id": "ejecucion_sql",
+        "descripcion": "Ejecutar consultas SQL mediante cursor.execute()",
+        "patron": "cursor\\.execute\\s*\\(",
+        "tipo": "regex",
+        "pista_error": "🔍 Pista del Tutor: ¿Invocaste 'cursor.execute(...)' para procesar tus sentencias DDL (CREATE) o DML (INSERT/SELECT)?"
+      },
+      {
+        "id": "confirmacion_commit",
+        "descripcion": "Confirmar las transacciones de modificación con commit()",
+        "patron": "\\.commit\\s*\\(\\)",
+        "tipo": "regex",
+        "pista_error": "💾 Pista del Tutor: En bases de datos relacionales, las modificaciones no se asientan solas. ¿Recordaste ejecutar 'conexion.commit()' para persistir los cambios?"
+      }
+    ]
+  },
+  "mision": {
+    "titulo": "Misión Práctica 22: Sistema de Inventario para Taller CFP 403",
+    "nivel": "Avanzado",
+    "puntosXP": 200,
+    "contexto": "El pañol de herramientas del CFP N° 403 necesita registrar y controlar el stock de componentes electrónicos (Arduinos, sensores, cables y multímetros). Debes crear un script Python con funciones CRUD para gestionar este inventario en una base SQLite.",
+    "requerimientos": [
+      "Crear una base SQLite llamada `panol_cfp403.db` con tabla `herramientas` (id, codigo_barras, descripcion, stock, ubicacion).",
+      "Implementar la función `agregar_herramienta(codigo, descripcion, stock, ubicacion)` con manejo de duplicados.",
+      "Implementar la función `actualizar_stock(id_herramienta, nuevo_stock)`.",
+      "Implementar la función `listar_bajo_stock(limite_minimo)` que retorne todos los ítems cuyo stock sea menor o igual al umbral.",
+      "Asegurar el uso de bloques `try / except sqlite3.Error / finally` para un cierre garantizado de la conexión."
+    ],
+    "pistas": [
+      "Define `codigo_barras TEXT UNIQUE` para evitar que se dupliquen códigos.",
+      "Utiliza `cursor.rowcount` para saber si la sentencia UPDATE afectó a alguna fila real.",
+      "Recuerda llamar a `conexion.commit()` tras operaciones de modificación (INSERT, UPDATE, DELETE)."
+    ],
+    "codigoPlantilla": "import sqlite3\n\ndef conectar_db():\n    return sqlite3.connect(\":memory:\") # o panol_cfp403.db\n\ndef inicializar_tablas(con):\n    # TU CÓDIGO AQUÍ\n    pass\n\ndef agregar_herramienta(con, codigo, descripcion, stock, ubicacion):\n    # TU CÓDIGO AQUÍ\n    pass\n\ndef listar_bajo_stock(con, limite_minimo=3):\n    # TU CÓDIGO AQUÍ\n    pass\n"
+  },
+  "recursos": {
+    "video": {
+      "tipo": "youtube",
+      "url": "https://www.youtube.com/embed/videoseries?list=PLinedj3B308D_Q_F9f_Vb_V-59xS6W7zR",
+      "titulo": "Clase Grabada: Persistencia y Bases de Datos SQLite3 con Python",
+      "duracion": "51:30 min"
+    },
+    "descargas": [
+      {
+        "nombre": "Apunte_SQLite3_Python_Clase22.pdf",
+        "descripcion": "Manual completo con sintaxis SQL DDL/DML y buenas prácticas en Python",
+        "tamano": "3.1 MB",
+        "tipo": "pdf",
+        "url": "#"
+      },
+      {
+        "nombre": "script_crud_sqlite.py",
+        "descripcion": "Plantilla modular con funciones CRUD reutilizables",
+        "tamano": "11 KB",
+        "tipo": "python",
+        "url": "#"
+      },
+      {
+        "nombre": "ejemplo_base_datos.db",
+        "descripcion": "Archivo de base de datos SQLite pre-poblada con 50 registros",
+        "tamano": "48 KB",
+        "tipo": "sqlite",
+        "url": "#"
+      }
+    ],
+    "enlaces": [
+      {
+        "titulo": "Documentación Oficial del módulo sqlite3 en Python",
+        "url": "https://docs.python.org/es/3/library/sqlite3.html"
+      },
+      {
+        "titulo": "DB Browser for SQLite (Herramienta visual recomendada)",
+        "url": "https://sqlitebrowser.org/"
+      },
+      {
+        "titulo": "Tutorial Interactivo de SQL (SQLBolt)",
+        "url": "https://sqlbolt.com/"
+      }
+    ]
+  }
+}

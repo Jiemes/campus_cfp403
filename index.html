@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Campus Virtual | CFP N° 403 Mercedes - Programación y Desarrollo de Software</title>
+  <meta name="description" content="Plataforma web inmersiva para el aprendizaje interactivo de programación en el Centro de Formación Profesional N° 403 de Mercedes. PSeInt, Python, POO, SQL y Videojuegos.">
+  
+  <!-- Tipografías de Google Fonts: Outfit (Titulares), Inter (Cuerpo) y Fira Code (Código y Terminal) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Estilos de la plataforma -->
+  <link rel="stylesheet" href="css/styles.css">
+  
+  <!-- Pyodide para ejecución real de Python en WebAssembly dentro del navegador -->
+  <script src="https://cdn.jsdelivr.net/pyodide/v0.25.1/full/pyodide.js" defer></script>
+</head>
+<body class="theme-graphite">
+
+  <!-- =====================================================================
+       HEADER PRINCIPAL INSTITUCIONAL
+       ===================================================================== -->
+  <header class="app-header" id="appHeader">
+    <div class="header-left">
+      <button class="btn-icon" id="btnToggleSidebar" title="Mostrar/Ocultar Menú Lateral" aria-label="Toggle Navegación">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+
+      <div class="brand-container">
+        <div class="brand-badge">CFP 403</div>
+        <div class="brand-info">
+          <h1 class="brand-title">CAMPUS VIRTUAL <span class="brand-accent">MERCEDES</span></h1>
+          <span class="brand-subtitle">Trayecto Formativo en Programación & Desarrollo</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Info rápida de la clase activa en barra superior -->
+    <div class="header-center">
+      <div class="current-class-badge" id="headerClassBadge">
+        <span class="indicator-dot"></span>
+        <span class="class-num" id="headerClassNum">Clase 13</span>
+        <span class="class-title-truncate" id="headerClassTitle">Cargando clase...</span>
+      </div>
+    </div>
+
+    <div class="header-right">
+      <!-- Indicador global de progreso en el header -->
+      <div class="header-progress">
+        <div class="progress-labels">
+          <span class="progress-label">Progreso del Alumno</span>
+          <span class="progress-pct" id="globalProgressPct">0%</span>
+        </div>
+        <div class="progress-track" title="Progreso global de las 37 clases">
+          <div class="progress-bar-fill" id="globalProgressBar" style="width: 0%;"></div>
+        </div>
+      </div>
+
+      <button class="btn btn-outline-cyan btn-sm" id="btnMarcarCompletada" title="Marcar esta clase como finalizada">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+        <span id="btnCompletadaTexto">Completar Clase</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- =====================================================================
+       CONTENEDOR MAESTRO DE LA APLICACIÓN
+       ===================================================================== -->
+  <div class="app-layout" id="appLayout">
+
+    <!-- ===================================================================
+         1. PANEL LATERAL (SIDEBAR): MAPA DE NAVEGACIÓN Y AVANCE (37 CLASES)
+         =================================================================== -->
+    <aside class="app-sidebar" id="appSidebar" aria-label="Navegación del Curso">
+      
+      <!-- Panel de avance del estudiante -->
+      <div class="sidebar-student-card">
+        <div class="student-header">
+          <div class="student-avatar">
+            <span>CFP</span>
+          </div>
+          <div class="student-details">
+            <span class="student-name">Estudiante CFP 403</span>
+            <span class="student-tag">Cohorte Anual • Programador</span>
+          </div>
+        </div>
+
+        <div class="student-stats-row">
+          <div class="stat-box">
+            <span class="stat-number" id="statsCompletedCount">0</span>
+            <span class="stat-label">Completadas</span>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat-box">
+            <span class="stat-number" id="statsTotalCount">37</span>
+            <span class="stat-label">Total Clases</span>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat-box">
+            <span class="stat-number" id="statsPendingCount">37</span>
+            <span class="stat-label">Pendientes</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Buscador y filtro rápido de clases -->
+      <div class="sidebar-search-box">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <input type="text" id="classSearchInput" placeholder="Buscar por tema o clase..." autocomplete="off">
+      </div>
+
+      <!-- Contenedor dinámico del índice de 37 clases agrupadas por módulos -->
+      <div class="sidebar-nav-container">
+        <div class="sidebar-nav-header">
+          <span class="nav-title">PLAN FORMATIVO (37 CLASES)</span>
+          <button class="btn-text-action" id="btnToggleAllModules" title="Expandir o contraer todos los módulos">
+            Colapsar todos
+          </button>
+        </div>
+
+        <!-- Los módulos y clases se inyectan dinámicamente desde data/classes-index.json -->
+        <nav class="course-index-tree" id="courseIndexTree" role="tree" aria-label="Temario">
+          <div class="loading-spinner-container">
+            <div class="spinner"></div>
+            <span>Cargando temario institucional...</span>
+          </div>
+        </nav>
+      </div>
+
+      <!-- Pie del Sidebar con datos institucionales -->
+      <footer class="sidebar-footer">
+        <div class="footer-links">
+          <a href="https://www.cfp403.com" target="_blank" rel="noopener">Web CFP 403</a>
+          <span>•</span>
+          <a href="#" id="btnReiniciarProgreso" title="Restablecer progreso local">Reiniciar Progreso</a>
+        </div>
+        <small class="footer-note">Mercedes, Prov. de Buenos Aires</small>
+      </footer>
+    </aside>
+
+    <!-- Overlay móvil para cuando el sidebar está abierto en pantallas pequeñas -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- ===================================================================
+         2. ÁREA CENTRAL: BANNER DE CLASE + 4 PESTAÑAS FIJAS
+         =================================================================== -->
+    <main class="app-main" id="mainContent">
+
+      <!-- Banner de Contexto de la Clase Activa -->
+      <section class="class-hero" id="classHero">
+        <div class="class-hero-meta">
+          <span class="badge badge-module" id="heroModuleBadge">Módulo 3: POO</span>
+          <span class="badge badge-time" id="heroDurationBadge">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+            <span id="heroDurationText">3 Horas</span>
+          </span>
+          <span class="badge badge-diff" id="heroDifficultyBadge">Intermedio</span>
+          <span class="badge badge-status" id="heroStatusBadge">Pendiente</span>
+        </div>
+
+        <h2 class="class-hero-title" id="heroTitle">
+          Cargando contenido de la clase...
+        </h2>
+        
+        <p class="class-hero-desc" id="heroDescription">
+          El contenido interactivo se está sincronizando con el servidor institucional.
+        </p>
+      </section>
+
+      <!-- Barra de navegación fija con las 4 Pestañas Principales -->
+      <div class="workspace-tabs-bar" role="tablist" aria-label="Bloques de la clase">
+        
+        <!-- Pestaña 1: Briefing Teórico -->
+        <button class="tab-button active" id="tabBtn-briefing" role="tab" aria-selected="true" aria-controls="tabPane-briefing">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+            <line x1="9" y1="7" x2="16" y2="7"></line>
+            <line x1="9" y1="11" x2="14" y2="11"></line>
+          </svg>
+          <span class="tab-title">1. Briefing Teórico</span>
+        </button>
+
+        <!-- Pestaña 2: Laboratorio Web (Sandbox) -->
+        <button class="tab-button" id="tabBtn-sandbox" role="tab" aria-selected="false" aria-controls="tabPane-sandbox">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="16 18 22 12 16 6"></polyline>
+            <polyline points="8 6 2 12 8 18"></polyline>
+            <line x1="14" y1="4" x2="10" y2="20"></line>
+          </svg>
+          <span class="tab-title">2. Laboratorio Web (Sandbox)</span>
+          <span class="tab-badge-live">En vivo</span>
+        </button>
+
+        <!-- Pestaña 3: Misión Práctica -->
+        <button class="tab-button" id="tabBtn-mision" role="tab" aria-selected="false" aria-controls="tabPane-mision">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+          </svg>
+          <span class="tab-title">3. Misión Práctica</span>
+          <span class="tab-xp-badge" id="tabMissionXP">+150 XP</span>
+        </button>
+
+        <!-- Pestaña 4: Recursos y Video -->
+        <button class="tab-button" id="tabBtn-recursos" role="tab" aria-selected="false" aria-controls="tabPane-recursos">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"></rect>
+            <polygon points="10 8 16 12 10 16 10 8"></polygon>
+          </svg>
+          <span class="tab-title">4. Recursos y Video</span>
+        </button>
+      </div>
+
+      <!-- =================================================================
+           CONTENEDORES DE CADA PESTAÑA (TAB PANES)
+           ================================================================= -->
+      <div class="tab-content-wrapper">
+
+        <!-- -------------------------------------------------------------
+             PANEL 1: BRIEFING TEÓRICO (Lectura extensa, scannable y limpia)
+             ------------------------------------------------------------- -->
+        <section class="tab-pane active" id="tabPane-briefing" role="tabpanel" aria-labelledby="tabBtn-briefing">
+          <article class="theoretical-briefing-container" id="briefingContent">
+            <!-- El contenido estructurado se inyecta dinámicamente desde el JSON -->
+            <div class="loading-state">
+              <div class="spinner"></div>
+              <p>Cargando módulo teórico...</p>
+            </div>
+          </article>
+        </section>
+
+        <!-- -------------------------------------------------------------
+             PANEL 2: LABORATORIO WEB (SANDBOX CON CONTENEDOR DINÁMICO)
+             ------------------------------------------------------------- -->
+        <section class="tab-pane" id="tabPane-sandbox" role="tabpanel" aria-labelledby="tabBtn-sandbox">
+          <div class="sandbox-container" id="sandboxContainer">
+            <!-- Construcción dinámica mediante EnvironmentBuilderFactory según 'tipo_entorno' de cada clase -->
+          </div>
+        </section>
+
+        <!-- -------------------------------------------------------------
+             PANEL 3: MISIÓN PRÁCTICA (Desafío del mundo real y evaluación)
+             ------------------------------------------------------------- -->
+        <section class="tab-pane" id="tabPane-mision" role="tabpanel" aria-labelledby="tabBtn-mision">
+          <div class="mission-container" id="missionContainer">
+            <!-- Contenido dinámico de la misión inyectado desde el JSON -->
+          </div>
+        </section>
+
+        <!-- -------------------------------------------------------------
+             PANEL 4: RECURSOS Y VIDEO (Grabación multimedia y descargas)
+             ------------------------------------------------------------- -->
+        <section class="tab-pane" id="tabPane-recursos" role="tabpanel" aria-labelledby="tabBtn-recursos">
+          <div class="resources-container" id="resourcesContainer">
+            <!-- Contenido dinámico de video y archivos inyectado desde el JSON -->
+          </div>
+        </section>
+
+      </div>
+    </main>
+
+  </div>
+
+  <!-- Toast de Notificaciones Flotantes -->
+  <div class="toast-notification" id="toastNotification" role="alert" aria-live="polite"></div>
+
+  <!-- Scripts Modulares -->
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
