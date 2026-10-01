@@ -469,7 +469,6 @@ class CampusController {
    */
   async init() {
     this.bindEvents();
-    this.setupEditorEvents();
     await this.loadCourseManifest();
     
     // Identificar qué clase cargar (por Query Param ?clase=X o último guardado)
@@ -563,41 +562,6 @@ class CampusController {
         }
       }
     });
-
-    // Botones del Sandbox
-    this.dom.btnRunSandboxCode.addEventListener('click', () => this.executeSandboxCode());
-    this.dom.btnClearTerminal.addEventListener('click', () => this.clearTerminal());
-    this.dom.btnResetSandboxCode.addEventListener('click', () => this.resetSandboxCode());
-    this.dom.btnDownloadCode.addEventListener('click', () => this.downloadCurrentCode());
-    if (this.dom.btnValidateSandboxCode) {
-      this.dom.btnValidateSandboxCode.addEventListener('click', () => this.validateSandboxCode());
-    }
-
-    // Conmutación de Vistas: Consola de Texto vs Lienzo Gráfico 2D
-    if (this.dom.btnViewConsole && this.dom.btnViewCanvas) {
-      this.dom.btnViewConsole.addEventListener('click', () => this.switchTerminalView('console'));
-      this.dom.btnViewCanvas.addEventListener('click', () => this.switchTerminalView('canvas'));
-    }
-
-    if (this.dom.btnClearCanvas) {
-      this.dom.btnClearCanvas.addEventListener('click', () => this.clearCanvas());
-    }
-
-    // Tracking de coordenadas en el Canvas
-    if (this.dom.gameCanvas) {
-      this.dom.gameCanvas.addEventListener('mousemove', (e) => {
-        const rect = this.dom.gameCanvas.getBoundingClientRect();
-        const scaleX = this.dom.gameCanvas.width / rect.width;
-        const scaleY = this.dom.gameCanvas.height / rect.height;
-        const x = Math.floor((e.clientX - rect.left) * scaleX);
-        const y = Math.floor((e.clientY - rect.top) * scaleY);
-        if (this.dom.canvasCoordsText) {
-          this.dom.canvasCoordsText.textContent = `X: ${x} | Y: ${y}`;
-        }
-      });
-      // Inicializar el canvas con mensaje de bienvenida
-      this.clearCanvas();
-    }
   }
 
   /**
@@ -606,6 +570,8 @@ class CampusController {
   setupEditorEvents() {
     const textarea = this.dom.sandboxTextarea;
     const gutter = this.dom.editorLineNumbers;
+
+    if (!textarea || !gutter) return;
 
     // Actualizar numeración de líneas en cada pulsación
     const updateLineNumbers = () => {
