@@ -1159,13 +1159,6 @@ class CampusController {
         </div>
       `;
     }
-              <span class="badge badge-module">Grabación Oficial de Cátedra</span>
-            </div>
-            <span class="video-duration">⏱ ${recursos.video.duracion || 'Clase Completa'}</span>
-          </div>
-        </div>
-      `;
-    }
 
     // 2. Grilla de Descargas de Archivos
     if (Array.isArray(recursos.descargas) && recursos.descargas.length > 0) {
